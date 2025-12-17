@@ -10,6 +10,7 @@ import MovieModal from "../MovieModal/MovieModal";
 import type { Movie } from "../../types/movie";
 
 function App() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
