@@ -9,7 +9,6 @@ interface MovieApiResponse {
 }
 
 export default async function fetchMovies(query: string, page: number): Promise<Movie[]> {
-  try {
     const response = await axios.get<MovieApiResponse>(API_URL, {
       params: {
         query: query,
@@ -22,8 +21,5 @@ export default async function fetchMovies(query: string, page: number): Promise<
     });
 
     return response.data.results;
-  } catch (error) {
-    console.error("Error fetching movies:", error);
-    throw new Error("Failed to fetch movies");
-  }
+
 }
