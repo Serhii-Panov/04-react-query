@@ -9,9 +9,12 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import MovieModal from "../MovieModal/MovieModal";
 import type { Movie } from "../../types/movie";
 import { useQuery } from "@tanstack/react-query";
+import ReactDOM from "react-dom";
+import ReactPaginate from "react-paginate";
 
 function App() {
   const [currentQuery, setCurrentQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["movies", currentQuery],
     queryFn: () => fetchMovies(currentQuery, 1),
