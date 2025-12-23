@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import fetchMovies from "../../services/movieService";
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
@@ -9,14 +9,13 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import MovieModal from "../MovieModal/MovieModal";
 import type { Movie } from "../../types/movie";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import css from "./App.module.css";
 
 function App() {
   const [currentQuery, setCurrentQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { data, error, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["movies", currentQuery, currentPage],
     queryFn: () => fetchMovies(currentQuery, currentPage),
     enabled: currentQuery !== "",
