@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import fetchMovies from "../../services/movieService";
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
@@ -15,16 +15,22 @@ import css from "./App.module.css";
 function App() {
   const [currentQuery, setCurrentQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["movies", currentQuery, currentPage],
     queryFn: () => fetchMovies(currentQuery, currentPage),
     enabled: currentQuery !== "",
     placeholderData: keepPreviousData,
   });
+  useEffect(() => {
+    if (isSuccess && data && data.results.length === 0) {
+      toast.error("No movies found for your request");
+    }
+  }, [isSuccess, data]);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const closeModal = () => setSelectedMovie(null);
   const handleSearch = (query: string) => {
     setCurrentQuery(query);
+    setCurrentPage(1);
   };
 
   const handleMovieSelect = (movie: Movie) => {
@@ -40,7 +46,7 @@ function App() {
       <SearchBar onSubmit={handleSearch} />
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
-      {data && (
+      {data && data.results.length > 1 && (
         <>
           {data.total_pages > 1 && (
             <ReactPaginate
